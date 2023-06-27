@@ -18,11 +18,11 @@ class AppCredentials(BaseModel):
 class EmailUserCredentials(BaseModel):
     email: str
     password: str
-    country_code: str = Field(alias="countryCode")
+    country_code: str = Field("+1", alias="countryCode")
 
 
 class LoginResponse(BaseModel):
     user: object
-    access_token: str = Field(alias="countryCode")
-    refresh_token: str = Field(alias="countryCode")
+    access_token: str = Field(alias="at")
+    refresh_token: str = Field(alias="rt")
     region: Region
