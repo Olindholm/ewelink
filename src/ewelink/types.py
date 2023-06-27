@@ -26,3 +26,57 @@ class LoginResponse(BaseModel):
     access_token: str = Field(alias="countryCode")
     refresh_token: str = Field(alias="countryCode")
     region: Region
+
+
+class DeviceExtraDescription(BaseModel):
+    model: str
+    ui: str
+    uiid: int
+    description: str
+    manufacturer: str
+    mac: str
+    apmac: str
+    model_info: str = Field(alias="modelInfo")
+    brand_id: str = Field(alias="brandId")
+    chip_id: str = Field(alias="chipid")
+
+
+class DeviceGroup(BaseModel):
+    ...
+
+
+class DeviceConfig(BaseModel):
+    ...
+
+
+class DeviceSettings(BaseModel):
+    ...
+
+
+class Family(BaseModel):
+    ...
+
+
+class Shared(BaseModel):
+    ...
+
+
+class Device(BaseModel):
+    name: str
+    deviceid: str
+    apikey: str
+    extra: DeviceExtraDescription
+    brand_name: str = Field(alias="brandName")
+    brand_logo: str = Field(alias="brandLogo")
+    show_brand: bool = Field(alias="showBrand")
+    product_model: str = Field(alias="productModel")
+    groups: list[DeviceGroup] = Field(alias="devGroups")
+    tags: dict[str, Any]
+    config: DeviceConfig = Field(alias="devConfig")
+    settings: DeviceSettings
+    family: Family
+    shared_by: Shared = Field(alias="sharedBy")
+    shared_to: Shared = Field(alias="shareTo")
+    devicekey: str
+    online: bool
+    params: dict[str, Any]
