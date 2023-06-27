@@ -1,0 +1,26 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  python:
+    name: Python Package Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Ensure pip
+        run: pip install pip --upgrade
+
+      - name: Ensure tox
+        run: pip install tox --upgrade
+
+      - name: Run tox
+        run: tox
