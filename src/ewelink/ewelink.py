@@ -99,14 +99,6 @@ class EWeLink:
 
         return data["data"]
 
-    # async def _access_token(self) -> str:
-    #     await self.login()
-
-    #     if self._login is None:
-    #         raise RuntimeError("User login is None after logging in.")
-
-    #     return self._login.access_token
-
     async def _auth_request(
         self,
         method: str,
@@ -115,7 +107,7 @@ class EWeLink:
         *args: Any,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Makes a authenaticated (user logged in) request."""
+        """Makes an authenaticated (user logged in) request."""
         _login = await self.login()
 
         return await self._request(
