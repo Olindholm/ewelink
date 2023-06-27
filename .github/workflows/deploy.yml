@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  version:
+    name: Determine Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Format semantic version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME:1}" >> "$GITHUB_OUTPUT"
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+
+  python:
+    name: Deploy Python Package
+    needs: [version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Ensure pip
+        run: pip install pip --upgrade
+
+      - name: Ensure build
+        run: pip install build --upgrade
+
+      - name: Ensure twine
+        run: pip install twine --upgrade
+
+      - name: Build Package
+        run: |
+          export PACKAGE_VERSION=${{ needs.version.outputs.version }}
+          python -m build --wheel
+
+      - name: Upload Package
+        run: |
+          python -m twine upload \
+            --verbose \
+            --username __token__ \
+            --password ${{ secrets.PYPI_TOKEN }} \
+            dist/*
