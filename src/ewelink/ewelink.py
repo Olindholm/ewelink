@@ -3,6 +3,8 @@ import hashlib
 import hmac
 import logging
 from aiohttp import ClientResponse, ClientSession, JsonPayload
+from traceback import TracebackException
+from types import TracebackType
 from typing import Any, Optional
 
 from .types import (
@@ -24,7 +26,7 @@ class EWeLinkError(Exception):
         data: dict[str, Any],
     ) -> None:
         super().__init__(
-            "\n".join(
+            " ".join(
                 [
                     f"eWeLink API request ({response.method}) to '{response.url}' failed.",
                     f"Error ({error}): {msg}.",
@@ -63,12 +65,18 @@ class EWeLinkPayload(JsonPayload):
 
 
 class EWeLink:
+    """eWeLink API class."""
+
     def __init__(
         self,
         app_cred: AppCredentials,
         user_cred: EmailUserCredentials,
         client_session: Optional[ClientSession] = None,
     ) -> None:
+        """Initiates a new instance.
+
+        Initiation of this class must be done in an async function.
+        """
         self._app_cred = app_cred
         self._user_cred = user_cred
         self._client_session = client_session if client_session else ClientSession()
@@ -77,7 +85,12 @@ class EWeLink:
     async def __aenter__(self) -> "EWeLink":
         return self
 
-    async def __aexit__(self) -> None:
+    async def __aexit__(
+        self,
+        exc_type: Exception,
+        exc_val: TracebackException,
+        traceback: TracebackType,
+    ) -> None:
         await self.close()
 
     async def close(self) -> None:
@@ -107,14 +120,6 @@ class EWeLink:
 
         return data["data"]
 
-    # async def _access_token(self) -> str:
-    #     await self.login()
-
-    #     if self._login is None:
-    #         raise RuntimeError("User login is None after logging in.")
-
-    #     return self._login.access_token
-
     async def _auth_request(
         self,
         method: str,
@@ -123,7 +128,7 @@ class EWeLink:
         *args: Any,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Makes a authenaticated (user logged in) request."""
+        """Makes an authenaticated (user logged in) request."""
         _login = await self.login()
 
         return await self._request(
@@ -146,7 +151,7 @@ class EWeLink:
                         region,
                         "POST",
                         "v2/user/login",
-                        data=EWeLinkPayload(self._user_cred, self._app_cred),
+                        data=EWeLinkPayload(self._user_cred.dict(by_alias=True), self._app_cred),
                     )
                 )
             except EWeLinkError as e:
