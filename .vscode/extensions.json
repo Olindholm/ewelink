@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.isort",
+        "redhat.vscode-yaml",
+    ],
+    "unwantedRecommendations": [
+        "ms-python.mypy-type-checker",
+        "ms-python.flake8",
+        "ms-azuretools.vscode-docker",
+    ]
+}

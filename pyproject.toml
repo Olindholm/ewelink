@@ -1,0 +1,37 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+pythonpath = "src"
+log_level = "DEBUG"
+addopts = "-v"
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+default_section = "STDLIB"
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_any_generics = true
+enable_error_code = [
+    "unused-awaitable",
+]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+    "suntime",
+]
+
+[tool.flake8]
+extend-exclude = [".venv"]
+max-line-length = 100
+per-file-ignores = []
