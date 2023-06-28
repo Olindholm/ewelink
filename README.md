@@ -54,7 +54,8 @@ async def main() -> None:
         await ewelink.login()
 
         # Make more API calls
-        ...
+        for device in await ewelink.get_thing_list():
+            print(device.name)
 
 
 if __name__ == "__main__":

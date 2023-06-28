@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 Region = Literal["as", "cn", "eu", "us"]
 DOMAINS: dict[Region, str] = {
@@ -70,13 +70,13 @@ class Device(BaseModel):
     brand_logo: str = Field(alias="brandLogo")
     show_brand: bool = Field(alias="showBrand")
     product_model: str = Field(alias="productModel")
-    groups: list[DeviceGroup] = Field(alias="devGroups")
-    tags: dict[str, Any]
-    config: DeviceConfig = Field(alias="devConfig")
-    settings: DeviceSettings
+    groups: Optional[list[DeviceGroup]] = Field(alias="devGroups")
+    tags: Optional[dict[str, Any]]
+    config: Optional[DeviceConfig] = Field(alias="devConfig")
+    settings: Optional[DeviceSettings]
     family: Family
-    shared_by: Shared = Field(alias="sharedBy")
-    shared_to: Shared = Field(alias="shareTo")
+    shared_by: Optional[Shared] = Field(alias="sharedBy")
+    shared_to: Optional[list[Shared]] = Field(alias="shareTo")
     devicekey: str
     online: bool
-    params: dict[str, Any]
+    params: Optional[dict[str, Any]]
