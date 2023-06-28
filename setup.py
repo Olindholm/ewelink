@@ -24,6 +24,8 @@ setup(
     # General
     name="ewelink",
     version=(version if version else "0+dev"),
+    # Package data (files)
+    package_data={"": ["py.typed"]},
     # Dependencies
     python_requires=">=3.9",
     install_requires=deps,
