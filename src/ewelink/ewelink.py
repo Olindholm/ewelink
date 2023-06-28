@@ -6,7 +6,14 @@ from traceback import TracebackException
 from types import TracebackType
 from typing import Any, Optional
 
-from .types import DOMAINS, AppCredentials, EmailUserCredentials, LoginResponse, Region
+from .types import (
+    DOMAINS,
+    AppCredentials,
+    Device,
+    EmailUserCredentials,
+    LoginResponse,
+    Region,
+)
 
 
 class EWeLinkError(Exception):
@@ -162,3 +169,34 @@ class EWeLink:
                 headers={"X-CK-Appid": self._app_cred.id},
             )
             self._login = None
+
+    async def get_thing_list(self) -> list[Device]:
+        response = await self._auth_request("GET", "v2/device/thing")
+        things = response["thingList"]
+
+        items = []
+        for thing in things:
+            type = thing["itemType"]
+            data = thing["itemData"]
+
+            if type == 1:
+                items.append(Device.parse_obj(data))
+            else:
+                raise NotImplementedError()
+
+        return items
+
+    async def update_thing_status(
+        self,
+        device: Device,
+        params: dict[str, Any],
+    ) -> None:
+        await self._auth_request(
+            "POST",
+            "v2/device/thing/status",
+            json={
+                "type": 1,
+                "id": device.deviceid,
+                "params": params,
+            },
+        )
