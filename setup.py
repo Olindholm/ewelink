@@ -8,7 +8,7 @@ deps = [
 test_deps = ["pytest>=7", "pytest-asyncio", "pytest-cov"]
 black_deps = ["black==22.8.0"]
 isort_deps = ["isort==5.10.1"]
-mypy_deps = ["mypy==0.991", *test_deps, "types-setuptools", "packaging", "types-PyYAML"]
+mypy_deps = ["mypy==0.991", *test_deps, "types-setuptools"]
 flake8_deps = ["flake8==6.0.0", "flake8-pyproject>=1.2.0"]
 dev_deps = ["tox", *test_deps, *black_deps, *isort_deps, *mypy_deps, *flake8_deps]
 
